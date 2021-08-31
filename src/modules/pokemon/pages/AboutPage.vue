@@ -30,6 +30,7 @@ export default {
     },
     created(){
         console.log('created')
+        //Peticiones Http
     },
     beforeMount(){
         console.log('beforeMount')
