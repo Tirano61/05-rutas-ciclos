@@ -17,7 +17,7 @@ export default {
         return{
             links:[
                 { to: 'pokemon-home', name: 'Pokemons' },
-                { to: 'pokemon-id', name: 'Por ID',  id: 151 },
+                { to: 'pokemon-id', name: 'Por ID',  id: 141 },
                 { to: 'pokemon-about', name: 'About' },
                 
                 { to: 'dbz-characters', name: 'Personajes' },

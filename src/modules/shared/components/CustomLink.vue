@@ -6,7 +6,9 @@
     v-else :to="routeComputed"
     v-slot="{ isActive }">
     
-    <a :class="isActive ? 'is-active' : 'normal-link'" >{{ link.name }}</a>
+    <a :class="isActive ? 'is-active' : 'normal-link'" >
+        {{ link.name }}
+    </a>
     </router-link>
 
 </template>

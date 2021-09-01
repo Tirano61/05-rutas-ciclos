@@ -1,40 +1,41 @@
-
 import { createRouter, createWebHashHistory } from "vue-router";
 
-import NoPagesFound from '../modules/shared/pages/NoPagesFound';
+import isAuthenticationGuard from "./auth-guard";
 
-const routes = [
-    {
+const routes = [{
         path: '/',
-       
+
         redirect: '/pokemon'
     },
     {
         path: '/pokemon',
         name: 'pokemon',
-        component: () => import(/* webpackChunkName: "PokemonLayout" */ '@/modules/pokemon/layouts/PokemonLayout'),
-        children: [
-            { 
-                path: 'home', 
+        component: () =>
+            import ( /* webpackChunkName: "PokemonLayout" */ '@/modules/pokemon/layouts/PokemonLayout'),
+        children: [{
+                path: 'home',
                 name: 'pokemon-home',
-                component: () => import(/* webpackChunkName: "ListPage" */ '../modules/pokemon/pages/ListPage') 
+                component: () =>
+                    import ( /* webpackChunkName: "ListPage" */ '../modules/pokemon/pages/ListPage')
             },
-            { 
-                path: 'about', 
+            {
+                path: 'about',
                 name: 'pokemon-about',
-                component: () => import(/* webpackChunkName: "AbautPage" */ '../modules/pokemon/pages/AboutPage') 
+                component: () =>
+                    import ( /* webpackChunkName: "AbautPage" */ '../modules/pokemon/pages/AboutPage')
             },
-            { 
-                path: 'pokemonid/:id', 
+            {
+                path: 'pokemonid/:id',
                 name: "pokemon-id",
-                component: () => import(/* webpackChunkName: "PokemonPage" */ '../modules/pokemon/pages/PokemonPage'),
-                props: ( route ) =>{
-                   
+                component: () =>
+                    import ( /* webpackChunkName: "PokemonPage" */ '../modules/pokemon/pages/PokemonPage'),
+                props: (route) => {
+
                     const id = Number(route.params.id)
-                    
-                    return isNaN( id ) ? { id: 1 } : { id: id }
-                    
-                } 
+
+                    return isNaN(id) ? { id: 1 } : { id: id }
+
+                }
             },
             {
                 path: '',
@@ -47,17 +48,20 @@ const routes = [
     {
         path: '/dbz',
         name: 'dbz',
-        component: () => import(/* webpackChunkName: "DbzLayout" */ '@/modules/dbz/layouts/DagonBallLayout'),
-        children: [
-            { 
-                path: 'characters', 
+        beforeEnter: [isAuthenticationGuard],
+        component: () =>
+            import ( /* webpackChunkName: "DbzLayout" */ '@/modules/dbz/layouts/DagonBallLayout'),
+        children: [{
+                path: 'characters',
                 name: 'dbz-characters',
-                component: () => import(/* webpackChunkName: "dbz-characters" */ '@/modules/dbz/pages/Characters') 
+                component: () =>
+                    import ( /* webpackChunkName: "dbz-characters" */ '@/modules/dbz/pages/Characters')
             },
-            { 
-                path: 'about', 
+            {
+                path: 'about',
                 name: 'dbz-about',
-                component: () => import(/* webpackChunkName: "dbz-abou" */ '@/modules/dbz/pages/About') 
+                component: () =>
+                    import ( /* webpackChunkName: "dbz-abou" */ '@/modules/dbz/pages/About')
             },
 
             {
@@ -68,17 +72,57 @@ const routes = [
     },
 
 
-    { 
-        path: '/:pathMatch(.*)*', 
-        component: () => import(/* webpackChunkName "NoPagesFound" */'@/modules/shared/pages/NoPagesFound') 
-        
-    },
-  ]
+    {
+        path: '/:pathMatch(.*)*',
+        component: () =>
+            import ( /* webpackChunkName "NoPagesFound" */ '@/modules/shared/pages/NoPagesFound')
 
-  const router = createRouter({
+    },
+]
+
+const router = createRouter({
     // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
     history: createWebHashHistory(),
     routes, // short for `routes: routes`
-  })
+})
 
-  export default router;
+
+//Guard Global sincrono (Pueba)
+// router.beforeEach((to, from, next) => {
+
+//     console.log({ to, from, next });
+// const random = Math.random() * 100
+// console.log(random);
+// if (random > 50) {
+//     console.log('Autenticado');
+//     next()
+// } else {
+//     console.log(random, 'Bloqueado por el beforEach guard');
+//     next({ name: 'pokemon-home' })
+// }
+
+// })
+
+// Guard Global asincrono 
+
+// const canAccess = () => {
+//     return new Promise(resolve => {
+//         const random = Math.random() * 100
+//         console.log(random);
+//         if (random > 50) {
+//             console.log('Autenticado CanAccess');
+//             resolve(true)
+//         } else {
+//             console.log(random, 'Bloqueado por el beforEach guard - CanAccess');
+//             resolve(false)
+//         }
+//     })
+// }
+
+// router.beforeEach(async(to, from, next) => {
+
+//     const authorized = await canAccess()
+//     authorized ? next() : next({ name: 'pokemon-home' })
+// })
+
+export default router;
